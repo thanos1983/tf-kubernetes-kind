@@ -35,3 +35,30 @@ provider "kubernetes" {
   # Configuration options
 }
 ````
+
+### How to get the Certificates for Kind
+
+Sample from command line:
+
+````bash
+$ kubectl config view --minify --flatten --context=kind-terraform-learn
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: ...
+    server: https://127.0.0.1:37249
+  name: kind-terraform-learn
+contexts:
+- context:
+    cluster: kind-terraform-learn
+    user: kind-terraform-learn
+  name: kind-terraform-learn
+current-context: kind-terraform-learn
+kind: Config
+preferences: {}
+users:
+- name: kind-terraform-learn
+  user:
+    client-certificate-data: ...
+    client-key-data: ...
+````

@@ -1,42 +1,29 @@
-resource "kubernetes_deployment" "nginx" {
-  metadata {
-    name = "nginx-deployment"
+module "test_cluster_role" {
+  source = "git@github.com:thanos1983/terraform//Kubernetes/modules/KubernetesClusterRoleV1"
+  metadata_block = {
+    name = "terraform-example"
   }
 
-  spec {
-    replicas = 2
-    selector {
-      match_labels = {
-        App = "nginx"
-      }
-    }
-    template {
-      metadata {
-        labels = {
-          App = "nginx"
+  aggregation_rule_block = {
+    cluster_role_selectors_blocks = [
+      {
+        match_labels = {
+          foo = "bar"
         }
-      }
-      spec {
-        container {
-          image = "nginx:1.14.2"
-          name  = "nginx"
 
-          port {
-            container_port = 80
+        match_expressions_blocks = [
+          {
+            key      = "environment"
+            operator = "In"
+            values   = ["non-exists-12345"]
+          },
+          {
+            key      = "environment"
+            operator = "In"
+            values   = ["non-exists-54321"]
           }
-
-          resources {
-            limits = {
-              cpu    = "0.5"
-              memory = "512Mi"
-            }
-            requests = {
-              cpu    = "250m"
-              memory = "50Mi"
-            }
-          }
-        }
+        ]
       }
-    }
+    ]
   }
 }
